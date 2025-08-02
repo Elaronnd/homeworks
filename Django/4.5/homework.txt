@@ -1,0 +1,36 @@
+CREATE TABLE members (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(150),
+  email VARCHAR(250),
+  birthday DATE,
+  join_date DATE
+);
+CREATE TABLE movies (
+  id INTEGER PRIMARY KEY,
+  title VARCHAR(100),
+  production DATETIME CHECK (YEAR(production) > 1888 AND YEAR(production) < 2025),
+  genre VARCHAR(50),
+  director VARCHAR(150)
+);
+CREATE TABLE events (
+  id INTEGER PRIMARY KEY,
+  date_event DATE,
+  location VARCHAR(350) NOT NULL,
+  movie_id INTEGER,
+  FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+CREATE TABLE attendance (
+  member_id INTEGER,
+  event_id INTEGER,
+  is_appear BOOLEAN,
+  FOREIGN KEY (member_id) REFERENCES members(id),
+  FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+
+
+SELECT member_id, event_id, is_appear FROM attendance JOIN members ON member_id = members.id JOIN events ON event_id = events.id WHERE YEAR(events.date_event) = 2025 AND is_appear = TRUE;
+
+SELECT location, movie_id, production FROM events JOIN movies ON movie_id = movies.id WHERE location = "Main Hall";
+
+SELECT is_appear, member_id FROM attendance JOIN members ON member_id = members.id WHERE is_appear <> TRUE;
